@@ -8,7 +8,7 @@
               <v-card-text>
                 <div class="layout column align-center">
                   <h1 class="flex my-4 primary--text">MINOS</h1>
-                  <h4 class="flex my-4 primary--text">by WingsOfHope</h4>
+                  <h4 class="flex my-4 primary--text">成为MINOS一员</h4>
                 </div>
                 <v-form>
                   <v-text-field
@@ -28,39 +28,58 @@
                     type="password"
                     v-model="model.password"
                   ></v-text-field>
-                  <v-switch v-model="model.type" :label="name"></v-switch>
+                  <v-text-field
+                    :append-icon="show2 ? 'visibility' : 'visibility_off'"
+                    :rules="[rules.required,rules.min,rules.max]"
+                    :type="show2 ? 'text' : 'password'"
+                    name="confirm"
+                    label="确认密码"
+                    v-model="cpassword"
+                    @click:append="show2 = !show2"
+                  ></v-text-field>
+                  <v-text-field
+                    append-icon="email"
+                    :rules="[rules.required,rules.min,rules.max]"
+                    name="email"
+                    label="邮箱"
+                    type="text"
+                    v-model="model.email"
+                  ></v-text-field>
+                  <!-- <v-switch v-model="model.type" :label="name"></v-switch> -->
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat href="/register" color="primary">去注册</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn block color="primary" @click="login" :loading="loading">登录</v-btn>
+                <v-btn block color="primary" @click="login" :loading="loading">注册</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
       </v-container>
     </v-content>
-    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+    <v-snackbar v-model="msgBar.show" :timeout="3600" top :color="msgBar.color">
       {{msgBar.msg}}
-      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+      <v-btn color="white" flat @click="msgBar.show = false">关闭</v-btn>
     </v-snackbar>
   </v-app>
 </template>
 
 <script>
 const ERROR_COLOR = "red accent-1";
+const INVALID_INPUT = "必填字段不能为空!";
 const SUCCESS_COLOR = "teal";
-const INVALID_ACOUNT_PASSWORD = "用户名或密码不能为空!";
-const SUCCESS_TIP = "欢迎登入MINOS作业管理系统";
+const SUCCESS_TIP = "感谢注册,欢迎成为MINOS的一员:)";
+
 export default {
   data: () => ({
     msgBar: {
-      color: null,
       show: false,
+      color: null,
       msg: ""
     },
-    model: { acount: "", password: "", type: true },
+    show2: false,
+    cpassword: "",
+    model: { acount: "", password: "", email: "" },
     loading: false,
     rules: {
       required: value => !!value || "必填字段",
@@ -77,18 +96,20 @@ export default {
   methods: {
     login() {
       //const INCORRECT_PASSWORD = '账号或密码错误!';
-      if (this.validate()) {
+      if (this.Validate()) {
         this.loading = true;
         setTimeout(() => {
           this.loading = false;
           this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
         }, 2000);
       } else {
-        this.showMsg(INVALID_ACOUNT_PASSWORD, ERROR_COLOR);
+        this.showMsg(INVALID_INPUT, ERROR_COLOR);
       }
     },
-    validate() {
-      return this.model.acount === "" || this.model.password === ""
+    Validate() {
+      return this.model.acount === "" ||
+        this.model.password === "" ||
+        this.model.email === ""
         ? false
         : true;
     },
