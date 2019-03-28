@@ -1,4 +1,6 @@
 <template>
+import { setTimeout } from 'timers';
+import { timeout } from 'q';
   <v-app id="login" class="primary">
     <v-content>
       <v-container fluid fill-height>
@@ -48,7 +50,7 @@
 <script>
 export default {
   data: () => ({
-    msg: "l",
+    msg: '',
     model: { acount: "", password: "", type: true },
     loading: false
   }),
@@ -58,7 +60,17 @@ export default {
     }
   },
   methods: {
-    login() {}
+    login() {
+      if(this.validate()) {
+        setTimeout(() => this.loading = true, 2000);
+      }
+    },
+    validate() {
+      if(this.model.acount === '' && this.model.password === '') {
+        return false;
+      }
+      return true;
+    }
   }
 };
 </script>
