@@ -46,6 +46,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
+      path: '/FAQ',
+      name: 'FAQ',
+      component: () => import('./views/FAQ.vue')
+    },
+    {
       path: '/*',
       redirect: '404'
     }
