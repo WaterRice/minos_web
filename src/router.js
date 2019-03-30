@@ -61,6 +61,11 @@ export default new Router({
       component: () => import('./views/homework/main.vue')
     },
     {
+      path: '/repository',
+      name: 'repository',
+      component: () => import('./views/repository/main.vue')
+    },
+    {
       path: '/*',
       redirect: '404'
     }
