@@ -30,7 +30,7 @@
                       <v-card-title primary-title>
                         <div>
                           <router-link
-                            :to="'/home/homework/' + item.hid"
+                            :to="'/homework/' + item.hid"
                             style="text-decoration-line: none"
                           >
                             <div class="headline primary--text">{{item.title}}</div>
@@ -43,7 +43,7 @@
                       </v-card-title>
                       <v-card-actions>
                         <div v-if="item.disabled">
-                          <v-btn flat small fab color="pink" :to="'/home/homework/' + item.hid">go</v-btn>
+                          <v-btn flat small fab color="pink" :to="'/homework/' + item.hid">go</v-btn>
                           <v-btn flat small fab color="pink" @click="plan(item.title)">plan</v-btn>
                         </div>
                         <div v-else>

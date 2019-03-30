@@ -16,7 +16,7 @@
               </v-layout>
             </v-container>
             <v-list>
-              <v-list-tile v-for="(problem, index) of problems" :key="problem.id">
+              <v-list-tile v-for="(problem, index) of selectedProblems" :key="problem.id">
                 <v-list-tile-content>
                   <v-btn
                     flat
@@ -158,6 +158,12 @@ export default {
   computed: {
     length() {
       return Math.floor((this.problems.length - 1) / 25) + 1;
+    },
+    selectedProblems() {
+      return this.problems.slice(
+        (this.page - 1) * 20,
+        Math.min(this.page * 20, this.problems.length)
+      );
     }
   },
   methods: {

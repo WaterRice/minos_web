@@ -58,12 +58,23 @@ export default new Router({
     {
       path: '/homework',
       name: 'homework',
-      component: () => import('./views/homework/main.vue')
+      component: () => import('./views/homework/main.vue'),
+    },
+    {
+      path: '/homework/:id',
+      name: 'homeworkDetail',
+      component: () => import('./views/homework/HomeworkDetail.vue'),
+      props: true
     },
     {
       path: '/repository',
       name: 'repository',
       component: () => import('./views/repository/main.vue')
+    },
+    {
+      path: '/competition',
+      name: 'competition',
+      component: () => import('./views/competition/main.vue')
     },
     {
       path: '/*',
