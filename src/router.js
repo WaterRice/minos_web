@@ -51,6 +51,16 @@ export default new Router({
       component: () => import('./views/FAQ.vue')
     },
     {
+      path: '/community',
+      name: 'community',
+      component: () => import('./views/community/main.vue')
+    },
+    {
+      path: '/homework',
+      name: 'homework',
+      component: () => import('./views/homework/main.vue')
+    },
+    {
       path: '/*',
       redirect: '404'
     }

@@ -5,12 +5,12 @@
     <v-toolbar-title>MINOS</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat href="/home">首页</v-btn>
-      <v-btn flat href="/homework">作业</v-btn>
-      <v-btn flat href="/repository">题库</v-btn>
-      <v-btn flat href="/competition">竞赛</v-btn>
-      <v-btn flat href="/community">社区</v-btn>
-      <v-btn flat href="/FAQ">FAQ</v-btn>
+      <v-btn flat href="/home" color="indigo">首页</v-btn>
+      <v-btn flat href="/homework" color="indigo">作业</v-btn>
+      <v-btn flat href="/repository" color="indigo">题库</v-btn>
+      <v-btn flat href="/competition" color="indigo">竞赛</v-btn>
+      <v-btn flat href="/community" color="indigo">社区</v-btn>
+      <v-btn flat href="/FAQ" color="indigo">FAQ</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <v-btn icon>
