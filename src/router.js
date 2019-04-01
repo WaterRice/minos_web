@@ -72,6 +72,12 @@ export default new Router({
       component: () => import('./views/repository/main.vue')
     },
     {
+      path: '/problem/:id',
+      name: 'problemDetail',
+      component: () => import('./views/repository/problemDetail.vue'),
+      props: true
+    },
+    {
       path: '/competition',
       name: 'competition',
       component: () => import('./views/competition/main.vue')
