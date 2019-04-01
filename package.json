@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "vue": "^2.6.6",
+    "vue-prism-component": "^1.1.1",
     "vue-router": "^3.0.1",
     "vue2-editor": "^2.6.6",
     "vuetify": "^1.5.5",

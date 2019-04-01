@@ -37,14 +37,23 @@
               ></v-textarea>
             </v-card>
             <v-container>
-              <v-layout justify-center>
-                <v-btn color="pink" class="white--text" @click="submit">提交</v-btn>
+              <v-layout>
+                <v-flex md3>
+                  <v-btn color="primary" class="white--text" @click="submit" :loading="loading">提交</v-btn>
+                </v-flex>
+                <v-flex md9>
+                  <v-btn flat color="orange">去瞅瞅榜单:)</v-btn>
+                </v-flex>
               </v-layout>
             </v-container>
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="msgBar.show" bottom :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -56,6 +65,11 @@ export default {
     HomeToolbar
   },
   data: () => ({
+    msgBar: {
+      show: false,
+      msg: "",
+      color: null
+    },
     problem: {
       id: 1001,
       title: "a+b",
@@ -64,11 +78,21 @@ export default {
       output: "15"
     },
     code: "",
-    items: ["Java", "C++", "C", "Python", "Go"]
+    items: ["Java", "C++", "C", "Python", "Go"],
+    loading: false
   }),
   methods: {
     submit() {
-      console.log(this.code);
+      this.loading = true;
+      setTimeout(() => {
+        this.showMsg("正确通过所有样例", "teal");
+        this.loading = false;
+      }, 5000);
+    },
+    showMsg(msg, color) {
+      this.msgBar.color = color;
+      this.msgBar.msg = msg;
+      this.msgBar.show = true;
     }
   }
 };
