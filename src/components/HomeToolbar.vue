@@ -4,7 +4,7 @@
     <v-toolbar-side-icon></v-toolbar-side-icon>
     <v-toolbar-title>MINOS</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-toolbar-items class="hidden-sm-and-down">
+    <v-toolbar-items class="hidden-sm-and-down" v-show="!searchMode">
       <v-btn flat href="/home" color="indigo">首页</v-btn>
       <v-btn flat href="/homework" color="indigo">作业</v-btn>
       <v-btn flat href="/repository" color="indigo">题库</v-btn>
@@ -12,8 +12,17 @@
       <v-btn flat href="/community" color="indigo">社区</v-btn>
       <v-btn flat href="/FAQ" color="indigo">FAQ</v-btn>
     </v-toolbar-items>
+    <v-toolbar-items class="hidden-sm-and-down" v-show="searchMode">
+      <v-text-field
+        label="全站搜索"
+        v-model="kw"
+        @blur="searchMode = false"
+        append-icon="search"
+        @keyup.enter="search"
+      ></v-text-field>
+    </v-toolbar-items>
     <v-spacer></v-spacer>
-    <v-btn icon>
+    <v-btn icon @click="searchMode = true">
       <v-icon>search</v-icon>
     </v-btn>
     <v-menu :nudge-width="100">
@@ -38,6 +47,8 @@
 <script>
 export default {
   data: () => ({
+    searchMode: false,
+    kw: "",
     menus: [
       { name: "登录", link: "/login" },
       { name: "注册", link: "/register" }
@@ -45,6 +56,10 @@ export default {
       //{name: '退出', link: ''}
     ]
   }),
-  methods: {}
+  methods: {
+    search() {
+      console.log(this.kw);
+    }
+  }
 };
 </script>

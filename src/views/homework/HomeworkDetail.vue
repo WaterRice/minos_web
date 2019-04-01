@@ -24,7 +24,7 @@
 
               <v-btn color="primary" @click="e1 = 2">下一步</v-btn>
 
-              <v-btn flat>Cancel</v-btn>
+              <v-btn flat>上一页</v-btn>
             </v-stepper-content>
 
             <v-stepper-content step="2">
@@ -34,7 +34,7 @@
 
               <v-btn color="primary" @click="e1 = 3">下一步</v-btn>
 
-              <v-btn flat @click="e1 = 1">Cancel</v-btn>
+              <v-btn flat @click="e1 = 1">上一页</v-btn>
             </v-stepper-content>
 
             <v-stepper-content step="3">
@@ -57,16 +57,20 @@
                 class="white--text"
                 @click="upload"
               >
-                Upload
+                提交
                 <v-icon right dark>cloud_upload</v-icon>
               </v-btn>
 
-              <v-btn flat @click="e1 = 2">Cancel</v-btn>
+              <v-btn flat @click="e1 = 2">上一页</v-btn>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -80,6 +84,11 @@ export default {
     VueEditor
   },
   data: () => ({
+    msgBar: {
+      show: false,
+      color: null,
+      msg: ""
+    },
     e1: 0,
     // loader: null,
     loading3: false,
@@ -91,7 +100,17 @@ export default {
   }),
   methods: {
     upload() {
-      console.log(this.content);
+      this.loading3 = true;
+      setTimeout(() => {
+        this.loading3 = false;
+        this.showMsg("作业上传成功", "teal");
+        console.log(this.content);
+      }, 2000);
+    },
+    showMsg(msg, color) {
+      this.msgBar.color = color;
+      this.msgBar.msg = msg;
+      this.msgBar.show = true;
     }
   }
 };

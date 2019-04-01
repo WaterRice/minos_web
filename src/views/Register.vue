@@ -50,7 +50,13 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn block color="primary" @click="login" :loading="loading">注册</v-btn>
+                <v-btn
+                  block
+                  color="primary"
+                  @click="login"
+                  :loading="loading"
+                  :disabled="loading"
+                >注册</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -131,7 +137,7 @@ export default {
   left: 0;
   content: "";
   z-index: 0;
-  background-image: url("../assets/300.jpg");
+  background-image: url("https://picsum.photos/500/300?image=20");
   background-repeat: unset;
 }
 </style>

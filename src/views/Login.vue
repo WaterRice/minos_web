@@ -34,7 +34,13 @@
               <v-card-actions>
                 <v-btn flat href="/register" color="primary">去注册</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn block color="primary" @click="login" :loading="loading">登录</v-btn>
+                <v-btn
+                  block
+                  color="primary"
+                  @click="login"
+                  :loading="loading"
+                  :disabled="loading"
+                >登录</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
