@@ -1,5 +1,9 @@
 # minos
 
+## About the project
+
+This is web client of  [minos]: https://github.com/WaterRice/minos
+
 ## Project setup
 ```
 npm install
