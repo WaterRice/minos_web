@@ -83,6 +83,22 @@ export default new Router({
       component: () => import('./views/competition/main.vue')
     },
     {
+      path: '/teacher',
+      component: () => import('./views/teacher/main.vue'),
+      children: [
+        {
+          path: '/',
+          name: 'teacher',
+          component: () => import('./views/teacher/index.vue')
+        },
+        {
+          path: 'publish',
+          name: 'publish',
+          component: () => import('./views/teacher/publish.vue')
+        }
+      ]
+    },
+    {
       path: '/*',
       redirect: '404'
     }
