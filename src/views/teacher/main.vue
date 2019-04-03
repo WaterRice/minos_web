@@ -4,11 +4,8 @@
       <v-dialog v-model="dialog2" width="300">
         <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>确认登出吗?</v-card-title>
-
           <v-card-text class="primary--text">感谢使用,祝您生活愉快!</v-card-text>
-
           <v-divider></v-divider>
-
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="pink" flat @click="out">确认</v-btn>
@@ -30,7 +27,7 @@
         </template>
         <v-list-tile>
           <v-list-tile-action>
-            <v-icon color="primary">settings</v-icon>
+            <v-icon color="primary">arrow_back</v-icon>
           </v-list-tile-action>
           <v-list-tile-content @click="dialog2 = true">
             <v-list-tile-title class="primary--text">系统登出</v-list-tile-title>
@@ -79,35 +76,25 @@
             <v-icon v-if="task" @click="create">add_circle</v-icon>
           </v-fade-transition>
         </v-text-field>
-
         <h2 class="display-1 info--text pl-3">
           今日任务:&nbsp;
           <v-fade-transition leave-absolute>
             <span :key="`tasks-${tasks.length}`">{{ tasks.length }}</span>
           </v-fade-transition>
         </h2>
-
         <v-divider class="mt-3"></v-divider>
-
         <v-layout my-1 align-center>
           <strong class="mx-3 error--text text--darken-3">未完成: {{ remainingTasks }}</strong>
-
           <v-divider vertical></v-divider>
-
           <strong class="mx-3 primary--text">已完成: {{ completedTasks }}</strong>
-
           <v-spacer></v-spacer>
-
           <v-progress-circular :value="progress" class="mr-2"></v-progress-circular>
         </v-layout>
-
         <v-divider class="mb-3"></v-divider>
-
         <v-card v-if="tasks.length > 0">
           <v-slide-y-transition class="py-0" group>
             <template v-for="(task, i) in tasks">
               <v-divider v-if="i !== 0" :key="`${i}-divider`"></v-divider>
-
               <v-list-tile :key="`${i}-${task.text}`">
                 <v-list-tile-action>
                   <v-checkbox v-model="task.done" color="info darken-3">
@@ -119,9 +106,7 @@
                     ></div>
                   </v-checkbox>
                 </v-list-tile-action>
-
                 <v-spacer></v-spacer>
-
                 <v-scroll-x-transition>
                   <v-icon v-if="task.done" color="success">check</v-icon>
                 </v-scroll-x-transition>

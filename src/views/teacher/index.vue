@@ -5,7 +5,13 @@
         <v-card>
           <v-card-title>
             <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="search" label="搜索" single-line hide-details></v-text-field>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="按ID搜索"
+              single-line
+              hide-details
+            ></v-text-field>
           </v-card-title>
           <v-data-table :headers="headers" :items="homeworks" :search="search">
             <template slot="items" slot-scope="props">
@@ -14,20 +20,11 @@
                 class="text-xs-left primary--text"
                 v-text="props.item.title.length > 5 ? props.item.title.substring(0,5) + '...' : props.item.title"
               ></td>
-              <!-- <td class="text-xs-left primary--text">{{ props.item.content.length }}</td> -->
+              <td class="primary--text text-xs-left">{{ props.item.subject}}</td>
               <td
                 class="text-xs-left primary--text"
                 v-text="new Date(props.item.from).toISOString().substring(0, 10)"
               ></td>
-              <!-- <td
-                class="text-xs-left"
-                :class="props.item.copied ? 'pink--text' : 'primary--text'"
-                v-text="props.item.copied === 1 ? '有' : '没有'"
-              ></td>
-              <td
-                class="text-xs-left"
-                :class="props.item.copied ? 'pink--text' : 'primary--text'"
-              >{{ props.item.similar }}</td>-->
               <td
                 class="text-xs-left primary--text"
                 v-text="new Date(props.item.to).toISOString().substring(0, 10)"
@@ -53,8 +50,11 @@
       <v-card>
         <v-container>
           <v-layout justify-center wrap>
+            <v-flex md7 style="text-align: center">
+              <v-btn flat tile style="font-size: 16px;" color="primary">修改作业信息</v-btn>
+            </v-flex>
             <v-flex md7>
-              <v-btn flat tile style="font-size: 16px">修改作业信息</v-btn>
+              <v-text-field v-model="selectedSub.title" prepend-icon="info" label="作业标题"></v-text-field>
             </v-flex>
             <v-flex md7>
               <v-menu
@@ -74,7 +74,6 @@
                   v-model="selectedSub.to"
                   label="截止日期"
                   prepend-icon="event"
-                  readonly
                 ></v-text-field>
                 <v-date-picker v-model="selectedSub.to" no-title scrollable>
                   <v-spacer></v-spacer>
@@ -83,9 +82,9 @@
                 </v-date-picker>
               </v-menu>
             </v-flex>
-            <v-flex md7>
+            <v-flex md7 style="text-align: center">
               <v-btn color="primary darken-1" flat @click="editDialog = false">取消</v-btn>
-              <v-btn color="primary darken-1" flat @click="update">提交</v-btn>
+              <v-btn color="primary darken-1" flat @click="update">更新</v-btn>
             </v-flex>
           </v-layout>
         </v-container>
@@ -98,7 +97,6 @@
 export default {
   data() {
     return {
-      // exportDialog: false,
       menu: false,
       editDialog: false,
       search: "",
@@ -110,10 +108,8 @@ export default {
           value: "homework_id"
         },
         { text: "作业标题", value: "title" },
-        // { text: "字数", value: "numbers" },
+        { text: "所属学科", value: "subject" },
         { text: "发布时间", value: "from" },
-        // { text: "抄袭嫌疑", value: "copied" },
-        // { text: "最相似", value: "similar" },
         { text: "截止时间", value: "to" },
         { text: "当前状态", value: "to" },
         { text: "提交数量", value: "submissions" }
@@ -122,6 +118,7 @@ export default {
         {
           homework_id: 10001,
           title: "第一次作业",
+          subject: "高等数学",
           from: 1544201374340,
           to: 1554207656107,
           submissions: 38
@@ -129,6 +126,7 @@ export default {
         {
           homework_id: 10011,
           title: "第二次作业",
+          subject: "线性代数",
           from: 1544201371340,
           to: 1564207656107,
           submissions: 10
@@ -136,6 +134,7 @@ export default {
         {
           homework_id: 10003,
           title: "第三次作业----非常快乐版",
+          subject: "抽象代数",
           from: 1544201374340,
           to: 1554207656107,
           submissions: 38
@@ -143,6 +142,7 @@ export default {
         {
           homework_id: 10006,
           title: "第四次作业",
+          subject: "计算几何",
           from: 1544201372340,
           to: 1554219656107,
           submissions: 28
@@ -151,21 +151,8 @@ export default {
       selectedSub: {}
     };
   },
-  computed: {
-    // status(to) {
-    //   return to >= new Date().valueOf() ? "进行中" : "已停止";
-    // }    ?????????
-  },
+  computed: {},
   methods: {
-    // check() {
-    //   let _this = this;
-    //   for (let it of this.submissions) {
-    //     if (it.grade === 0) {
-    //       _this.exportDialog = true;
-    //       break;
-    //     }
-    //   }
-    // },
     editItem(item) {
       this.selectedSub = item;
       this.selectedSub.to = new Date(this.selectedSub.to)
