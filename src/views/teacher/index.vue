@@ -15,7 +15,11 @@
           </v-card-title>
           <v-data-table :headers="headers" :items="homeworks" :search="search">
             <template slot="items" slot-scope="props">
-              <td class="primary--text">{{ props.item.homework_id}}</td>
+              <td class="primary--text">
+                <router-link
+                  :to="'/teacher/submissions/' + props.item.homework_id"
+                >{{ props.item.homework_id}}</router-link>
+              </td>
               <td
                 class="text-xs-left primary--text"
                 v-text="props.item.title.length > 5 ? props.item.title.substring(0,5) + '...' : props.item.title"
@@ -82,12 +86,6 @@
                 </v-date-picker>
               </v-menu>
             </v-flex>
-            <!-- <v-flex md7>
-              <v-text-field v-model="selectedSub.descb" label="作业描述" prepend-icon="help"></v-text-field>
-            </v-flex>
-            <v-flex md7>
-              <v-text-field v-model="selectedSub.repu" label="作业要求" prepend-icon="mdi-mouse"></v-text-field>
-            </v-flex>-->
             <v-flex md7 style="text-align: center">
               <v-btn color="primary darken-1" flat @click="editDialog = false">取消</v-btn>
               <v-btn color="primary darken-1" flat @click="update">更新</v-btn>

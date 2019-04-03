@@ -127,9 +127,7 @@ export default {
     drawer: null,
     items: [
       { icon: "home", text: "首页面板", link: "" },
-      { icon: "history", text: "发布作业", link: "/publish" },
-      { icon: "settings", text: "系统设置", link: "/settings" },
-      { icon: "help", text: "FAQ", link: "/help" }
+      { icon: "history", text: "发布作业", link: "/publish" }
     ],
     tasks: [
       {

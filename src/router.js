@@ -95,6 +95,12 @@ export default new Router({
           path: 'publish',
           name: 'publish',
           component: () => import('./views/teacher/publish.vue')
+        },
+        {
+          path: 'submissions/:id',
+          name: 'submissions',
+          component: () => import('./views/teacher/submissions.vue'),
+          props: true
         }
       ]
     },
