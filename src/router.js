@@ -83,6 +83,11 @@ export default new Router({
       component: () => import('./views/competition/main.vue')
     },
     {
+      path: '/board',
+      name: 'board',
+      component: () => import('./views/status.vue')
+    },
+    {
       path: '/teacher',
       component: () => import('./views/teacher/main.vue'),
       children: [

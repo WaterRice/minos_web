@@ -42,7 +42,7 @@
                   <v-btn color="primary" class="white--text" @click="submit" :loading="loading">提交</v-btn>
                 </v-flex>
                 <v-flex md9>
-                  <v-btn flat color="orange">去瞅瞅榜单:)</v-btn>
+                  <v-btn flat color="orange" to="/board">去瞅瞅榜单:)</v-btn>
                 </v-flex>
               </v-layout>
             </v-container>
