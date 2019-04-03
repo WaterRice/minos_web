@@ -46,7 +46,7 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-dialog v-model="editDialog" persistent max-width="888">
+    <v-dialog v-model="editDialog" persistent max-width="666">
       <v-card>
         <v-container>
           <v-layout justify-center wrap>
@@ -82,6 +82,12 @@
                 </v-date-picker>
               </v-menu>
             </v-flex>
+            <!-- <v-flex md7>
+              <v-text-field v-model="selectedSub.descb" label="作业描述" prepend-icon="help"></v-text-field>
+            </v-flex>
+            <v-flex md7>
+              <v-text-field v-model="selectedSub.repu" label="作业要求" prepend-icon="mdi-mouse"></v-text-field>
+            </v-flex>-->
             <v-flex md7 style="text-align: center">
               <v-btn color="primary darken-1" flat @click="editDialog = false">取消</v-btn>
               <v-btn color="primary darken-1" flat @click="update">更新</v-btn>
@@ -148,26 +154,30 @@ export default {
           submissions: 28
         }
       ],
-      selectedSub: {}
+      selectedSub: {
+        homework_id: 0,
+        title: "",
+        to: ""
+      }
     };
   },
   computed: {},
   methods: {
     editItem(item) {
-      this.selectedSub = item;
-      this.selectedSub.to = new Date(this.selectedSub.to)
-        .toISOString()
-        .substring(0, 10);
+      this.selectedSub.homework_id = item.homework_id;
+      this.selectedSub.title = item.title;
+      this.selectedSub.to = new Date(item.to).toISOString().substring(0, 10);
       this.editDialog = true;
     },
     update() {
-      let _this = this;
-      let param = {
-        grade: _this.selectedSub.grade
-      };
+      for (let homework of this.homeworks) {
+        if (homework.homework_id === this.selectedSub.homework_id) {
+          homework.title = this.selectedSub.title;
+          homework.to = this.selectedSub.to;
+          break;
+        }
+      }
       this.editDialog = false;
-      console.log(param);
-      console.log(this.selectedSub.to);
     }
   }
 };
