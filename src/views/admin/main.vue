@@ -16,7 +16,7 @@
     <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
       <v-list dense>
         <template v-for="item in items">
-          <v-list-tile :key="item.text" :to="'/teacher' + item.link" append>
+          <v-list-tile :key="item.text" :to="'/admin' + item.link" append>
             <v-list-tile-action>
               <v-icon color="primary">{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -126,20 +126,12 @@ export default {
     dialog: false,
     drawer: null,
     items: [
-      { icon: "home", text: "首页面板", link: "" },
-      { icon: "history", text: "发布作业", link: "/publish" },
-      { icon: "help", text: "问题管理", link: "/problemManagement" }
+      { icon: "home", text: "课程管理", link: "/subjectManagement" },
+      { icon: "history", text: "教师管理", link: "/teacherManagement" },
+      { icon: "help", text: "学生管理", link: "/studentManagement" },
+      { icon: "home", text: "问题管理", link: "/problemManagement" }
     ],
-    tasks: [
-      {
-        done: false,
-        text: "批改数据结构作业"
-      },
-      {
-        done: false,
-        text: "布置一些作业"
-      }
-    ],
+    tasks: [],
     task: null
   }),
   computed: {
@@ -160,7 +152,7 @@ export default {
     },
     out() {
       this.dialog2 = false;
-      this.$router.push("/login");
+      this.$router.push("/admin/login");
     },
     create() {
       this.tasks.push({

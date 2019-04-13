@@ -106,8 +106,44 @@ export default new Router({
           name: 'submissions',
           component: () => import('./views/teacher/submissions.vue'),
           props: true
+        },
+        {
+          path: 'problemManagement',
+          name: 'problemManagement',
+          component: () => import('./views/teacher/problemManagement.vue')
         }
       ]
+    },
+    {
+      path: '/admin',
+      component: () => import("./views/admin/main.vue"),
+      children: [
+        {
+          path: 'subjectManagement',
+          name: 'subjectManagement',
+          component: () => import('./views/admin/subject.vue')
+        },
+        {
+          path: 'teacherManagement',
+          name: 'teacherManagement',
+          component: () => import('./views/admin/teacher.vue')
+        },
+        {
+          path: 'studentManagement',
+          name: 'studentManagement',
+          component: () => import('./views/admin/student.vue')
+        },
+        {
+          path: 'problemManagement',
+          name: 'adminProblemManagement',
+          component: () => import('./views/admin/problem.vue')
+        }
+      ]
+    },
+    {
+      path: '/admin/login',
+      name: 'root',
+      component: () => import("./views/admin/login.vue")
     },
     {
       path: '/*',
