@@ -104,10 +104,16 @@ export default {
       //const INCORRECT_PASSWORD = '账号或密码错误!';
       if (this.Validate()) {
         this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
-        }, 2000);
+        this.$postRequest("/student/tokens", this.model).then(res => {
+          if (res.data == null) {
+            this.showMsg("账号或密码错误", ERROR_COLOR);
+          } else {
+            localStorage.setItem("Authorization", res.headers["Authorization"]);
+            this.loading = false;
+            this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
+            this.$router.push("/home");
+          }
+        });
       } else {
         this.showMsg(INVALID_INPUT, ERROR_COLOR);
       }

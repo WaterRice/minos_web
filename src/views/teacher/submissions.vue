@@ -16,10 +16,10 @@
           </v-card-title>
           <v-data-table :headers="headers" :items="submissions" :search="search">
             <template slot="items" slot-scope="props">
-              <td class="primary--text">{{ props.item.student_id}}</td>
+              <td class="primary--text">{{ props.item.student.id}}</td>
               <td
                 class="text-xs-left primary--text"
-                v-text="props.item.student_name.length > 5 ? props.item.student_name.substring(0,5) + '...' : props.item.student_name"
+                v-text="props.item.student.name.length > 5 ? props.item.student.name.substring(0,5) + '...' : props.item.student.name"
               ></td>
               <td
                 class="text-xs-left primary--text"
@@ -64,17 +64,19 @@ export default {
         text: "学生ID",
         align: "left",
         sortable: true,
-        value: "student_id"
+        value: "student.id"
       },
-      { text: "学生姓名", value: "student_name" },
+      { text: "学生姓名", value: "student.name" },
       { text: "提交时间", value: "time" },
       { text: "所评成绩", value: "grade" }
     ],
     submissions: [
       {
-        submission_id: 1,
-        student_id: 222016602063020,
-        student_name: "屠龙刀",
+        id: 1,
+        student: {
+          id: 10002,
+          name: "赵敏"
+        },
         time: 15557896639,
         grade: 100
       },
@@ -108,20 +110,20 @@ export default {
       }
     ],
     selectedSubmission: {
-      submission_id: 0,
+      id: 0,
       content: "lalalallallallalla",
       grade: 0
     }
   }),
   methods: {
     editItem(item) {
-      this.selectedSubmission.submission_id = item.submission_id;
+      this.selectedSubmission.id = item.id;
       this.selectedSubmission.grade = item.grade;
       this.editDialog = true;
     },
     update() {
       for (let tmp of this.submissions) {
-        if (this.selectedSubmission.submission_id === tmp.submission_id) {
+        if (this.selectedSubmission.id === tmp.id) {
           tmp.grade = this.selectedSubmission.grade;
           break;
         }

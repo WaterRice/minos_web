@@ -101,17 +101,32 @@ export default {
   methods: {
     upload() {
       this.loading3 = true;
-      setTimeout(() => {
-        this.loading3 = false;
-        this.showMsg("作业上传成功", "teal");
-        console.log(this.content);
-      }, 2000);
+      let _this = this;
+      let param = {
+        id: _this.id,
+        descb: _this.descb,
+        repu: _this.repu
+      };
+      this.$postRequest("/student/submissions", param)
+        .then(res => {
+          if (res.data == true) this.showMsg("作业上传成功", "teal");
+          else this.showMsg("作业上传失败", "error");
+          this.loading3 = false;
+        })
+        .catch(() => {
+          this.loading3 = false;
+        });
     },
     showMsg(msg, color) {
       this.msgBar.color = color;
       this.msgBar.msg = msg;
       this.msgBar.show = true;
     }
+  },
+  mounted() {
+    this.$getRequest("/homeworks/" + this.id).then(res => {
+      this.homework = res.data;
+    });
   }
 };
 </script>

@@ -7,7 +7,7 @@
           <v-card tile flat>
             <v-card-title class="primary--text" primary-title>题目描述:</v-card-title>
             <v-flex md9>
-              <v-card-text v-html="problem.content"></v-card-text>
+              <v-card-text v-html="problem.descb"></v-card-text>
             </v-flex>
           </v-card>
           <v-card tile flat>
@@ -84,16 +84,31 @@ export default {
   methods: {
     submit() {
       this.loading = true;
-      setTimeout(() => {
-        this.showMsg("正确通过所有样例", "teal");
+      let _this = this;
+      let param = {
+        problemId: _this.id,
+        content: _this.code,
+        language: 0
+      };
+      this.$postRequest("/student/codesubmissions", param).then(res => {
+        if (res.data == true) {
+          this.showMsg("正确通过所有样例", "teal");
+        } else {
+          this.showMsg("未通过所有测试样例", "error");
+        }
         this.loading = false;
-      }, 5000);
+      });
     },
     showMsg(msg, color) {
       this.msgBar.color = color;
       this.msgBar.msg = msg;
       this.msgBar.show = true;
     }
+  },
+  mounted() {
+    this.$getRequest("/problems/" + this.id).then(res => {
+      this.problem = res.data;
+    });
   }
 };
 </script>

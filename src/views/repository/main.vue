@@ -170,6 +170,11 @@ export default {
     search() {
       console.log(parseInt(this.id));
     }
+  },
+  mounted() {
+    this.$getRequest("/problems").then(res => {
+      this.problems = res.data;
+    });
   }
 };
 </script>

@@ -19,40 +19,40 @@
             </v-card-title>
             <v-container>
               <v-layout row wrap>
-                <v-flex xs12 sm3 v-for="item of selectedHomeworks" :key="item.hid">
+                <v-flex xs12 sm3 v-for="(item,index) of selectedHomeworks" :key="item.id">
                   <v-hover>
                     <v-card
                       slot-scope="{ hover }"
                       class="homework-card"
                       :class="`elevation-${hover ? 10 : 2}`"
                     >
-                      <v-img :src="item.imgUrl" height="150px"></v-img>
+                      <v-img :src="imgUrls[index%5]" height="150px"></v-img>
                       <v-card-title primary-title>
                         <div>
                           <router-link
-                            :to="'/homework/' + item.hid"
+                            :to="'/homework/' + item.id"
                             style="text-decoration-line: none"
                           >
                             <div class="headline primary--text">{{item.title}}</div>
                           </router-link>
                           <span
                             class="grey--text"
-                            v-text="new Date(item.pubTime).toISOString().substring(0,10)"
+                            v-text="new Date(item.end).toISOString().substring(0,10)"
                           ></span>
                         </div>
                       </v-card-title>
                       <v-card-actions>
-                        <div v-if="item.disabled">
-                          <v-btn flat small fab color="pink" :to="'/homework/' + item.hid">go</v-btn>
-                          <v-btn flat small fab color="pink" @click="plan(item.title)">plan</v-btn>
+                        <div v-if="item.end > new Date().valueOf()">
+                          <v-btn flat small fab color="pink" :to="'/homework/' + item.id">go</v-btn>
+                          <!-- <v-btn flat small fab color="pink" @click="plan(item.title)">plan</v-btn> -->
                         </div>
                         <div v-else>
                           <v-btn flat disabled>已过期</v-btn>
                         </div>
                         <v-spacer></v-spacer>
-                        <v-btn icon @click="item.show = !item.show">
+                        <!-- <v-btn icon @click="item.show = !item.show">
                           <v-icon>{{ item.show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-                        </v-btn>
+                        </v-btn>-->
                       </v-card-actions>
                       <v-slide-y-transition>
                         <v-card-text v-show="item.show" class="grey--text">{{item.notice}}</v-card-text>
@@ -84,10 +84,9 @@ export default {
       page: 1,
       homeworks: [
         {
-          hid: 1,
-          imgUrl: "https://cdn.vuetifyjs.com/images/cards/desert.jpg",
+          id: 1,
           title: "数据结构",
-          pubTime: new Date().toISOString().substring(0, 10),
+          end: new Date().toISOString().substring(0, 10),
           notice:
             "奉天承运,皇帝诏曰: 请同学们尽快交上数据结构作业,截至时间是12月23日.过期的一概拒收,成绩按照零分处置.钦此!",
           show: false
@@ -227,6 +226,13 @@ export default {
             "奉天承运,皇帝诏曰: 请同学们尽快交上数据结构作业,截至时间是12月23日.过期的一概拒收,成绩按照零分处置.钦此!",
           show: false
         }
+      ],
+      imgUrls: [
+        "https://cdn.vuetifyjs.com/images/cards/desert.jpg",
+        "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
+        "https://cdn.vuetifyjs.com/images/cards/house.jpg",
+        "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
+        "https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
       ]
     };
   },
@@ -246,6 +252,13 @@ export default {
     search() {
       console.log(this.kw);
     }
+  },
+  mounted() {
+    this.$getRequest("/homeworks")
+      .then(res => {
+        this.homeworks = res.data;
+      })
+      .catch(() => {});
   }
 };
 </script>

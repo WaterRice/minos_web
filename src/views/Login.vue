@@ -85,10 +85,26 @@ export default {
       //const INCORRECT_PASSWORD = '账号或密码错误!';
       if (this.validate()) {
         this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
-        }, 2000);
+        const url = this.model.type ? "/student/token" : "/teacher/token";
+        const target = this.model.type ? "/home" : "/teacher/home";
+        this.$postRequest(url, this.model)
+          .then(res => {
+            if (res.data == null) {
+              this.showMsg("账号或密码错误", ERROR_COLOR);
+            } else {
+              console.log(res.headers.toString());
+              localStorage.setItem(
+                "Authorization",
+                res.headers["Authorization"]
+              );
+              this.loading = false;
+              this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
+              this.$router.push(target);
+            }
+          })
+          .catch(() => {
+            this.showMsg("网络错误", ERROR_COLOR);
+          });
       } else {
         this.showMsg(INVALID_ACOUNT_PASSWORD, ERROR_COLOR);
       }

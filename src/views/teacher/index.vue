@@ -16,28 +16,26 @@
           <v-data-table :headers="headers" :items="homeworks" :search="search">
             <template slot="items" slot-scope="props">
               <td class="primary--text">
-                <router-link
-                  :to="'/teacher/submissions/' + props.item.homework_id"
-                >{{ props.item.homework_id}}</router-link>
+                <router-link :to="'/teacher/submissions/' + props.item.id">{{ props.item.id}}</router-link>
               </td>
               <td
                 class="text-xs-left primary--text"
                 v-text="props.item.title.length > 5 ? props.item.title.substring(0,5) + '...' : props.item.title"
               ></td>
-              <td class="primary--text text-xs-left">{{ props.item.subject}}</td>
+              <td class="primary--text text-xs-left">{{ props.item.subject.name}}</td>
               <td
                 class="text-xs-left primary--text"
-                v-text="new Date(props.item.from).toISOString().substring(0, 10)"
+                v-text="new Date(props.item.start).toISOString().substring(0, 10)"
               ></td>
               <td
                 class="text-xs-left primary--text"
-                v-text="new Date(props.item.to).toISOString().substring(0, 10)"
+                v-text="new Date(props.item.end).toISOString().substring(0, 10)"
               ></td>
               <td
                 class="text-xs-left primary--text"
-                v-text="props.item.to >= new Date().valueOf() ? '进行中' : '已停止'"
+                v-text="props.item.end >= new Date().valueOf() ? '进行中' : '已停止'"
               ></td>
-              <td class="text-xs-left primary--text">{{ props.item.submissions }}</td>
+              <td class="text-xs-left primary--text">{{ props.item.sum }}</td>
               <v-icon small color="primary" class="mr-2" @click="editItem(props.item)">edit</v-icon>
             </template>
             <v-alert
@@ -66,7 +64,7 @@
                 :close-on-content-click="false"
                 v-model="menu"
                 :nudge-right="40"
-                :return-value.sync="selectedSub.to"
+                :return-value.sync="selectedSub.end"
                 lazy
                 transition="scale-transition"
                 offset-y
@@ -75,14 +73,14 @@
               >
                 <v-text-field
                   slot="activator"
-                  v-model="selectedSub.to"
+                  v-model="selectedSub.end"
                   label="截止日期"
                   prepend-icon="event"
                 ></v-text-field>
-                <v-date-picker v-model="selectedSub.to" no-title scrollable>
+                <v-date-picker v-model="selectedSub.end" no-title scrollable>
                   <v-spacer></v-spacer>
                   <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.menu.save(selectedSub.to)">OK</v-btn>
+                  <v-btn flat color="primary" @click="$refs.menu.save(selectedSub.end)">OK</v-btn>
                 </v-date-picker>
               </v-menu>
             </v-flex>
@@ -109,23 +107,26 @@ export default {
           text: "作业ID",
           align: "left",
           sortable: true,
-          value: "homework_id"
+          value: "id"
         },
         { text: "作业标题", value: "title" },
-        { text: "所属学科", value: "subject" },
-        { text: "发布时间", value: "from" },
-        { text: "截止时间", value: "to" },
-        { text: "当前状态", value: "to" },
-        { text: "提交数量", value: "submissions" }
+        { text: "所属学科", value: "subject.name" },
+        { text: "发布时间", value: "start" },
+        { text: "截止时间", value: "end" },
+        { text: "当前状态", value: "end" },
+        { text: "提交数量", value: "sum" }
       ],
       homeworks: [
         {
-          homework_id: 10001,
+          id: 10001,
           title: "第一次作业",
-          subject: "高等数学",
-          from: 1544201374340,
-          to: 1554207656107,
-          submissions: 38
+          subject: {
+            id: 100,
+            name: "高等数学"
+          },
+          start: 1544201374340,
+          end: 1554207656107,
+          sum: 38
         },
         {
           homework_id: 10011,
@@ -153,30 +154,35 @@ export default {
         }
       ],
       selectedSub: {
-        homework_id: 0,
+        id: 0,
         title: "",
-        to: ""
+        end: ""
       }
     };
   },
   computed: {},
   methods: {
     editItem(item) {
-      this.selectedSub.homework_id = item.homework_id;
+      this.selectedSub.id = item.id;
       this.selectedSub.title = item.title;
-      this.selectedSub.to = new Date(item.to).toISOString().substring(0, 10);
+      this.selectedSub.end = new Date(item.end).toISOString().substring(0, 10);
       this.editDialog = true;
     },
     update() {
       for (let homework of this.homeworks) {
-        if (homework.homework_id === this.selectedSub.homework_id) {
+        if (homework.id === this.selectedSub.id) {
           homework.title = this.selectedSub.title;
-          homework.to = this.selectedSub.to;
+          homework.end = this.selectedSub.end;
           break;
         }
       }
       this.editDialog = false;
     }
+  },
+  mounted() {
+    this.$getRequest("/teacher/publishedHomeworks").then(res => {
+      this.homeworks = res.data;
+    });
   }
 };
 </script>

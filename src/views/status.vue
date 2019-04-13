@@ -17,15 +17,13 @@
             </v-card-title>
             <v-data-table :headers="headers" :items="codeSubmissions" :search="search">
               <template slot="items" slot-scope="props">
-                <td class="primary--text">{{ props.item.problem_id}}</td>
+                <td class="primary--text">{{ props.item.id}}</td>
                 <td
                   class="text-xs-left"
                   :class="props.item.status === 0 ? 'teal--text' : 'error--text'"
-                  v-text="props.item.student_name.length > 5 ? props.item.student_name.substring(0,5) + '...' : props.item.student_name"
+                  v-text="props.item.student_name.length > 5 ? props.item.student.name.substring(0,5) + '...' : props.item.student_name"
                 ></td>
-                <td
-                  :class="props.item.status === 0 ? 'teal--text' : 'error--text'"
-                >{{ props.item.language}}</td>
+                <td :class="props.item.status === 0 ? 'teal--text' : 'error--text'">Java</td>
                 <td
                   class="text-xs-left"
                   :class="props.item.status === 0 ? 'teal--text' : 'error--text'"
@@ -64,18 +62,21 @@ export default {
         text: "问题ID",
         align: "left",
         sortable: true,
-        value: "student_id"
+        value: "id"
       },
-      { text: "学生姓名", value: "student_name" },
+      { text: "学生姓名", value: "student.name" },
       { text: "使用语言", value: "" },
       { text: "提交时间", value: "time" },
       { text: "评测情况", value: "grade" }
     ],
     codeSubmissions: [
       {
-        codeSubmissions_id: 1,
-        problem_id: 1001,
-        student_name: "屠龙刀",
+        id: 1,
+        problemId: 1001,
+        student: {
+          id: 0,
+          name: ""
+        },
         language: "Java",
         time: 1556377846,
         status: 0
