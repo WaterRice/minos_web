@@ -65,12 +65,21 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
+    msgBar: {
+      color: null,
+      show: false,
+      msg: ""
+    },
     dialog: false,
     headers: [
       {
@@ -121,21 +130,31 @@ export default {
     }
   },
   methods: {
+    showMsg(msg, color) {
+      this.msgBar.color = color || "primary";
+      this.msgBar.msg = msg || "未知错误";
+      this.msgBar.show = true;
+    },
     editItem(item) {
       let id = item.id;
       this.editedIndex = this.students.indexOf(item);
-      console.log(id);
-      this.editedItem = {
-        id: 0,
-        name: "zzz",
-        group: 1,
-        acount: "zzzzzz"
-      };
+      this.$getRequest("/admin/students/" + id).then(res => {
+        this.editedItem = res.data;
+      });
       this.dialog = true;
     },
     deleteItem(item) {
       const index = this.students.indexOf(item);
-      confirm("确定删除此项吗?") && this.students.splice(index, 1);
+      if (confirm("确定删除此项吗?")) {
+        this.$deleteRequest("/admin/students/" + item.id).then(res => {
+          if (res.data) {
+            this.students.splice(index, 1);
+            this.showMsg("删除成功", "teal");
+          } else {
+            this.showMsg("删除失败", "error");
+          }
+        });
+      }
     },
     close() {
       this.dialog = false;
@@ -155,25 +174,15 @@ export default {
         Object.assign(this.students[this.editedIndex], tmp);
       } else {
         this.students.push(tmp);
+        this.showMsg("添加成功", "teal");
       }
       this.close();
     }
   },
   mounted() {
-    this.students = [
-      {
-        id: 1,
-        name: "赵敏",
-        group: 1,
-        acount: "666666"
-      },
-      {
-        id: 2,
-        name: "止诺",
-        group: 1,
-        acount: "888888"
-      }
-    ];
+    this.$getRequest("/admin/students").then(res => {
+      this.students = res.data;
+    });
   }
 };
 </script>

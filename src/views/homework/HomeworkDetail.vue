@@ -90,12 +90,11 @@ export default {
       msg: ""
     },
     e1: 0,
-    // loader: null,
     loading3: false,
     content: "",
     homework: {
-      descb: `hhhhhhhhhhhhhhhhhhhh`,
-      repu: `hhhhhhhhhhhhhhhhhhhh`
+      descb: "",
+      repu: ""
     }
   }),
   methods: {
@@ -103,9 +102,8 @@ export default {
       this.loading3 = true;
       let _this = this;
       let param = {
-        id: _this.id,
-        descb: _this.descb,
-        repu: _this.repu
+        homeworkId: _this.id,
+        content: _this.content
       };
       this.$postRequest("/student/submissions", param)
         .then(res => {

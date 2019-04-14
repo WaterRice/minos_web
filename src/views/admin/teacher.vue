@@ -57,12 +57,21 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
+    msgBar: {
+      color: null,
+      show: false,
+      msg: ""
+    },
     dialog: false,
     headers: [
       {
@@ -109,20 +118,31 @@ export default {
     }
   },
   methods: {
+    showMsg(msg, color) {
+      this.msgBar.color = color || "primary";
+      this.msgBar.msg = msg || "未知错误";
+      this.msgBar.show = true;
+    },
     editItem(item) {
       let id = item.id;
       this.editedIndex = this.teachers.indexOf(item);
-      console.log(id);
-      this.editedItem = {
-        id: 1,
-        name: "zzz",
-        acount: "999999"
-      };
+      this.$getRequest("/admin/teachers/" + id).then(res => {
+        this.editedItem = res.data;
+      });
       this.dialog = true;
     },
     deleteItem(item) {
       const index = this.teachers.indexOf(item);
-      confirm("确定删除此项吗?") && this.teachers.splice(index, 1);
+      if (confirm("确定删除此项吗?")) {
+        this.$deleteRequest("/admin/teachers/" + item.id).then(res => {
+          if (res.data) {
+            this.teachers.splice(index, 1);
+            this.showMsg("删除成功", "teal");
+          } else {
+            this.showMsg("删除失败", "teal");
+          }
+        });
+      }
     },
     close() {
       this.dialog = false;
@@ -132,37 +152,27 @@ export default {
       }, 300);
     },
     save() {
-      let tmp = {
-        id: this.editedItem.id,
-        name: this.editedItem.name,
-        acount: this.editedItem.acount
-      };
       if (this.editedIndex > -1) {
-        Object.assign(this.teachers[this.editedIndex], tmp);
+        Object.assign(this.teachers[this.editedIndex], this.editedItem);
+        this.showMsg("更新成功");
       } else {
-        this.teachers.push(tmp);
+        this.$postRequest("/admin/teachers", this.editedItem).then(res => {
+          if (res.data) {
+            this.editedItem.id = res.data;
+            this.teachers.push(this.editedItem);
+            this.showMsg("添加成功", "teal");
+          } else {
+            this.showMsg("添加失败", "error");
+          }
+        });
       }
       this.close();
     }
   },
   mounted() {
-    this.teachers = [
-      {
-        id: 1,
-        name: "zzz",
-        acount: "777777"
-      },
-      {
-        id: 2,
-        name: "qqq",
-        acount: "333333"
-      },
-      {
-        id: 3,
-        name: "sss",
-        acount: "555555"
-      }
-    ];
+    this.$getRequest("/admin/teachers").then(res => {
+      this.teachers = res.data;
+    });
   }
 };
 </script>

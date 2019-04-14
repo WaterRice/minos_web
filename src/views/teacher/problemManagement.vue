@@ -73,12 +73,21 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
+    msgBar: {
+      color: null,
+      show: false,
+      msg: ""
+    },
     dialog: false,
     headers: [
       {
@@ -127,22 +136,31 @@ export default {
     }
   },
   methods: {
+    showMsg(msg, color) {
+      this.msgBar.color = color || "primary";
+      this.msgBar.msg = msg || "未知错误";
+      this.msgBar.show = true;
+    },
     editItem(item) {
       let id = item.id;
       this.editedIndex = this.problems.indexOf(item);
-      console.log(id);
-      this.editedItem = {
-        id: id,
-        title: "a+b",
-        descb: "计算a+b",
-        input: "1 8",
-        output: 9
-      };
+      this.$getRequest("/teacher/problems/" + id).then(res => {
+        this.editedItem = res.data;
+      });
       this.dialog = true;
     },
     deleteItem(item) {
       const index = this.problems.indexOf(item);
-      confirm("确定删除此项吗?") && this.problems.splice(index, 1);
+      if (confirm("确定删除此项吗?")) {
+        this.$deleteRequest("/teacher/problems/" + item.id).then(res => {
+          if (res.data) {
+            this.problems.splice(index, 1);
+            this.showMsg("删除成功", "teal");
+          } else {
+            this.showMsg("删除失败", "error");
+          }
+        });
+      }
     },
     close() {
       this.dialog = false;
@@ -153,20 +171,34 @@ export default {
     },
     save() {
       let tmp = { id: this.editedItem.id, title: this.editedItem.title };
+      let _this = this;
       if (this.editedIndex > -1) {
         Object.assign(this.problems[this.editedIndex], tmp);
       } else {
-        this.problems.push(tmp);
+        let param = {
+          id: 0,
+          title: _this.editedItem.title,
+          descb: _this.editedItem.descb,
+          input: _this.editedItem.input,
+          output: _this.editedItem.output
+        };
+        this.$postRequest("/teacher/problems", param).then(res => {
+          if (res.data) {
+            param.id = res.data;
+            this.problems.push(tmp);
+            this.showMsg("添加成功", "teal");
+          } else {
+            this.showMsg("添加失败", "error");
+          }
+        });
       }
       this.close();
     }
   },
   mounted() {
-    this.problems = [
-      { id: 1, title: "a+b" },
-      { id: 2, title: "a*b" },
-      { id: 3, title: "a/b" }
-    ];
+    this.$getRequest("/teacher/problems").then(res => {
+      this.problems = res.data;
+    });
   }
 };
 </script>

@@ -50,6 +50,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -57,6 +61,11 @@
 export default {
   props: ["id"],
   data: () => ({
+    showMsg(msg, color) {
+      this.msgBar.color = color || "primary";
+      this.msgBar.msg = msg || "未知错误";
+      this.msgBar.show = true;
+    },
     editDialog: false,
     search: "",
     headers: [
@@ -79,56 +88,55 @@ export default {
         },
         time: 15557896639,
         grade: 100
-      },
-      {
-        submission_id: 2,
-        student_id: 222016602063021,
-        student_name: "倚天剑",
-        time: 15557896639,
-        grade: 90
-      },
-      {
-        submission_id: 3,
-        student_id: 222016602063023,
-        student_name: "xxx",
-        time: 15557896639,
-        grade: 70
-      },
-      {
-        submission_id: 4,
-        student_id: 222016602063026,
-        student_name: "jjj",
-        time: 15557896639,
-        grade: 65
-      },
-      {
-        submission_id: 5,
-        student_id: 222016602063028,
-        student_name: "ggg",
-        time: 15557896639,
-        grade: 70
       }
     ],
     selectedSubmission: {
       id: 0,
-      content: "lalalallallallalla",
-      grade: 0
+      student: {
+        id: 0,
+        name: ""
+      },
+      time: 0,
+      grade: 0,
+      content: ""
     }
   }),
   methods: {
+    showMsg(msg, color) {
+      this.msgBar.color = color || "primary";
+      this.msgBar.msg = msg || "未知错误";
+      this.msgBar.show = true;
+    },
     editItem(item) {
       this.selectedSubmission.id = item.id;
       this.selectedSubmission.grade = item.grade;
-      this.editDialog = true;
+      this.selectedSubmission.time = item.time;
+      this.selectedSubmission.student.id = item.student.id;
+      this.selectedSubmission.student.name = item.student.name;
+      this.$getRequest("/teacher/submissions/" + item.id).then(res => {
+        this.selectedSubmission.content = res.data.content;
+      });
+      this.this.editDialog = true;
     },
     update() {
-      for (let tmp of this.submissions) {
-        if (this.selectedSubmission.id === tmp.id) {
-          tmp.grade = this.selectedSubmission.grade;
-          break;
+      let _this = this;
+      this.$putRequest("/teacher/submissions/" + this.selectedSubmission.id, {
+        grade: _this.selectedSubmission.grade
+      }).then(res => {
+        if (res.data) {
+          for (let tmp of this.submissions) {
+            if (this.selectedSubmission.id === tmp.id) {
+              tmp.grade = this.selectedSubmission.grade;
+              break;
+            }
+          }
+          this.editDialog = false;
+          this.showMsg("评分成功", "teal");
+        } else {
+          this.editDialog = false;
+          this.showMsg("评分失败", "teal");
         }
-      }
-      this.editDialog = false;
+      });
     }
   }
 };

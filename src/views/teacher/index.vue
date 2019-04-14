@@ -92,6 +92,10 @@
         </v-container>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -99,6 +103,11 @@
 export default {
   data() {
     return {
+      msgBar: {
+        color: null,
+        show: false,
+        msg: ""
+      },
       menu: false,
       editDialog: false,
       search: "",
@@ -118,39 +127,15 @@ export default {
       ],
       homeworks: [
         {
-          id: 10001,
-          title: "第一次作业",
+          id: 0,
+          title: "",
           subject: {
-            id: 100,
-            name: "高等数学"
+            id: 0,
+            name: ""
           },
-          start: 1544201374340,
-          end: 1554207656107,
-          sum: 38
-        },
-        {
-          homework_id: 10011,
-          title: "第二次作业",
-          subject: "线性代数",
-          from: 1544201371340,
-          to: 1564207656107,
-          submissions: 10
-        },
-        {
-          homework_id: 10003,
-          title: "第三次作业----非常快乐版",
-          subject: "抽象代数",
-          from: 1544201374340,
-          to: 1554207656107,
-          submissions: 38
-        },
-        {
-          homework_id: 10006,
-          title: "第四次作业",
-          subject: "计算几何",
-          from: 1544201372340,
-          to: 1554219656107,
-          submissions: 28
+          start: 0,
+          end: 0,
+          sum: 20
         }
       ],
       selectedSub: {
@@ -162,6 +147,11 @@ export default {
   },
   computed: {},
   methods: {
+    showMsg(msg, color) {
+      this.msgBar.color = color || "primary";
+      this.msgBar.msg = msg || "未知错误";
+      this.msgBar.show = true;
+    },
     editItem(item) {
       this.selectedSub.id = item.id;
       this.selectedSub.title = item.title;
@@ -177,6 +167,7 @@ export default {
         }
       }
       this.editDialog = false;
+      this.showMsg("更新成功", "teal");
     }
   },
   mounted() {

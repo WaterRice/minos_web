@@ -71,11 +71,11 @@ export default {
       color: null
     },
     problem: {
-      id: 1001,
-      title: "a+b",
-      content: "计算a+b的值",
-      input: "7 8",
-      output: "15"
+      id: 0,
+      title: "",
+      content: "",
+      input: "",
+      output: ""
     },
     code: "",
     items: ["Java", "C++", "C", "Python", "Go"],

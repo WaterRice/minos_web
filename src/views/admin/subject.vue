@@ -22,36 +22,15 @@
                       ></v-text-field>
                     </v-flex>
                     <v-flex md10>
-                      <v-text-field
-                        label="任课教师姓名"
-                        v-model="editedItem.teacher.name"
-                        :rules="[rules.required,rules.max10]"
-                      ></v-text-field>
+                      <v-select
+                        :items="teachers"
+                        label="请选择任课教师"
+                        item-value="id"
+                        item-text="name"
+                        :rules="[rules.required]"
+                        v-model="editItem.teacher.id"
+                      ></v-select>
                     </v-flex>
-                    <!-- <v-flex md10>
-                      <v-textarea
-                        label="问题描述"
-                        v-model="editedItem.descb"
-                        hint="编写问题描述"
-                        :rules="[rules.required,rules.max300]"
-                      ></v-textarea>
-                    </v-flex>
-                    <v-flex md10>
-                      <v-textarea
-                        label="问题输入样例"
-                        v-model="editedItem.input"
-                        hint="编写输入样例"
-                        :rules="[rules.required,rules.max300]"
-                      ></v-textarea>
-                    </v-flex>
-                    <v-flex md10>
-                      <v-textarea
-                        label="问题输出样例"
-                        v-model="editedItem.output"
-                        hint="编写输出样例"
-                        :rules="[rules.required,rules.max300]"
-                      ></v-textarea>
-                    </v-flex>-->
                     <v-flex md10 style="text-align:center">
                       <br>
                       <br>
@@ -81,12 +60,21 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="msgBar.show" :timeout="3000" top :color="msgBar.color">
+      {{msgBar.msg}}
+      <v-btn color="white" flat @click="show = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
+    msgBar: {
+      color: null,
+      show: false,
+      msg: ""
+    },
     dialog: false,
     headers: [
       {
@@ -98,6 +86,7 @@ export default {
       { text: "名称", value: "name" },
       { text: "任课教师", value: "teacher.name" }
     ],
+    teachers: [{ id: 0, name: "" }],
     editedIndex: -1,
     editedItem: {
       id: 0,
@@ -142,23 +131,31 @@ export default {
     }
   },
   methods: {
+    showMsg(msg, color) {
+      this.msgBar.color = color || "primary";
+      this.msgBar.msg = msg || "未知错误";
+      this.msgBar.show = true;
+    },
     editItem(item) {
       let id = item.id;
       this.editedIndex = this.subjects.indexOf(item);
-      console.log(id);
-      this.editedItem = {
-        id: id,
-        name: "抽象代数",
-        teacher: {
-          id: 0,
-          name: "zzz"
-        }
-      };
+      this.$getRequest("/admin/subjects/" + id).then(res => {
+        this.editedItem = res.data;
+      });
       this.dialog = true;
     },
     deleteItem(item) {
       const index = this.subjects.indexOf(item);
-      confirm("确定删除此项吗?") && this.subjects.splice(index, 1);
+      if (confirm("确定删除此项吗?")) {
+        this.$deleteRequest("/admin/subjects/" + item.id).then(res => {
+          if (res.data) {
+            this.subjects.splice(index, 1);
+            this.showMsg("删除成功", "teal");
+          } else {
+            this.showMsg("删除失败", "error");
+          }
+        });
+      }
     },
     close() {
       this.dialog = false;
@@ -179,31 +176,33 @@ export default {
       };
       if (this.editedIndex > -1) {
         Object.assign(this.subjects[this.editedIndex], tmp);
+        this.showMsg("更新成功", "teal");
       } else {
-        this.subjects.push(tmp);
+        let param = {
+          id: 0,
+          name: this.editedItem.name,
+          teacherId: this.editedIndex.teacher.id
+        };
+        this.$postRequest("/admin/subjects", param).then(res => {
+          if (res.data) {
+            param.id = res.data;
+            this.subjects.push(tmp);
+            this.showMsg("添加成功", "teal");
+          } else {
+            this.showMsg("添加失败", "error");
+          }
+        });
       }
       this.close();
     }
   },
   mounted() {
-    this.subjects = [
-      {
-        id: 1,
-        name: "啊哈哈",
-        teacher: {
-          id: 1,
-          name: "zzzz"
-        }
-      },
-      {
-        id: 2,
-        name: "嗯哼哼",
-        teacher: {
-          id: 1,
-          name: "qqqq"
-        }
-      }
-    ];
+    this.$getRequest("/admin/subjects").then(res => {
+      this.subjects = res.data;
+    });
+    this.$getRequest("/admin/teachers").then(res => {
+      this.teachers = res.data;
+    });
   }
 };
 </script>

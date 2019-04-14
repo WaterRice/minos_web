@@ -86,18 +86,19 @@ export default {
       if (this.validate()) {
         this.loading = true;
         const url = this.model.type ? "/student/token" : "/teacher/token";
-        const target = this.model.type ? "/home" : "/teacher/home";
+        const target = this.model.type ? "/home" : "/teacher";
         this.$postRequest(url, this.model)
           .then(res => {
-            if (res.data == null) {
+            if (!res.data.status) {
               this.showMsg("账号或密码错误", ERROR_COLOR);
+              this.loading = false;
             } else {
-              console.log(res.headers.toString());
+              console.log(res.headers["Authorization"]);
+              this.loading = false;
               localStorage.setItem(
                 "Authorization",
                 res.headers["Authorization"]
               );
-              this.loading = false;
               this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
               this.$router.push(target);
             }

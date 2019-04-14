@@ -105,14 +105,16 @@ export default {
       if (this.Validate()) {
         this.loading = true;
         this.$postRequest("/student/tokens", this.model).then(res => {
-          if (res.data == null) {
+          if (!res.data.status) {
             this.showMsg("账号或密码错误", ERROR_COLOR);
-          } else {
-            localStorage.setItem("Authorization", res.headers["Authorization"]);
             this.loading = false;
+          } else {
+            this.loading = false;
+            localStorage.setItem("Authorization", res.headers["Authorization"]);
             this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
             this.$router.push("/home");
           }
+          
         });
       } else {
         this.showMsg(INVALID_INPUT, ERROR_COLOR);
