@@ -99,6 +99,13 @@ export default {
       this.msgBar.show = true;
     },
     submit() {
+      let h = {
+        title: this.homework.title,
+        descb: this.homework.descb,
+        repu: this.homework.repu,
+        end: new Date(this.end).valueOf(),
+        subjectId: this.homework.subjectId
+      };
       this.$postRequest("/teacher/homeworks", this.homework).then(res => {
         if (res.data) {
           this.showMsg("发布成功", "teal");

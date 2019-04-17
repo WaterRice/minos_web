@@ -102,7 +102,7 @@ export default {
       this.loading3 = true;
       let _this = this;
       let param = {
-        homeworkId: _this.id,
+        homeworkId: parseInt(_this.id),
         content: _this.content
       };
       this.$postRequest("/student/submissions", param)

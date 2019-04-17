@@ -93,12 +93,7 @@ export default {
               this.showMsg("账号或密码错误", ERROR_COLOR);
               this.loading = false;
             } else {
-              console.log(res.headers["Authorization"]);
               this.loading = false;
-              localStorage.setItem(
-                "Authorization",
-                res.headers["Authorization"]
-              );
               this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
               this.$router.push(target);
             }

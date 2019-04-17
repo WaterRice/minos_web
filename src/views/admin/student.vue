@@ -4,12 +4,12 @@
       <v-layout wrap>
         <v-flex md10>
           <v-toolbar flat color="white">
-            <v-toolbar-title>Students</v-toolbar-title>
+            <v-toolbar-title>所有学生</v-toolbar-title>
             <v-divider class="mx-2" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="800px" persistent>
               <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                <v-btn color="primary" dark class="mb-2" v-on="on">新增学生</v-btn>
               </template>
               <v-card>
                 <v-container>

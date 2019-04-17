@@ -21,7 +21,7 @@
                 <td
                   class="text-xs-left"
                   :class="props.item.status === 0 ? 'teal--text' : 'error--text'"
-                  v-text="props.item.student_name.length > 5 ? props.item.student.name.substring(0,5) + '...' : props.item.student_name"
+                  v-text="props.item.student.name.length > 5 ? props.item.student.name.substring(0,5) + '...' : props.item.student.name"
                 ></td>
                 <td :class="props.item.status === 0 ? 'teal--text' : 'error--text'">Java</td>
                 <td
@@ -80,41 +80,14 @@ export default {
         language: "Java",
         time: 1556377846,
         status: 0
-      },
-      {
-        codeSubmissions_id: 3,
-        problem_id: 1001,
-        student_name: "屠龙刀",
-        language: "Java",
-        time: 1566377846,
-        status: 1
-      },
-      {
-        codeSubmissions_id: 5,
-        problem_id: 1001,
-        student_name: "屠龙刀",
-        language: "Java",
-        time: 1556377846,
-        status: 0
-      },
-      {
-        codeSubmissions_id: 2,
-        problem_id: 1001,
-        student_name: "屠龙刀",
-        language: "Java",
-        time: 1556377846,
-        status: 1
-      },
-      {
-        codeSubmissions_id: 4,
-        problem_id: 1001,
-        student_name: "屠龙刀",
-        language: "Java",
-        time: 1556377846,
-        status: 0
       }
     ]
-  })
+  }),
+  mounted() {
+    this.$getRequest("/codeSubmissions").then(res => {
+      this.codeSubmissions = res.data;
+    });
+  }
 };
 </script>
 

@@ -6,20 +6,26 @@
         <v-flex>
           <v-card tile flat>
             <v-card-title class="primary--text" primary-title>题目描述:</v-card-title>
+            <pre>
             <v-flex md9>
               <v-card-text v-html="problem.descb"></v-card-text>
             </v-flex>
+            </pre>
           </v-card>
           <v-card tile flat>
             <v-card-title class="primary--text" primary-title>输入样例:</v-card-title>
             <v-flex md9>
-              <v-card-text v-html="problem.input" style="letter-spacing: 6px"></v-card-text>
+              <pre>
+              <v-card-text v-html="problem.inputExample" style="letter-spacing: 6px"></v-card-text>
+              </pre>
             </v-flex>
           </v-card>
           <v-card tile flat>
             <v-card-title class="primary--text" primary-title>输出样例:</v-card-title>
             <v-flex md9>
-              <v-card-text v-html="problem.output" style="letter-spacing: 6px"></v-card-text>
+              <pre>
+              <v-card-text v-html="problem.outputExample" style="letter-spacing: 6px"></v-card-text>
+              </pre>
             </v-flex>
             <v-card tile flat>
               <v-card-title class="primary--text" primary-title>编辑代码:</v-card-title>
@@ -74,8 +80,8 @@ export default {
       id: 0,
       title: "",
       content: "",
-      input: "",
-      output: ""
+      inputExample: "",
+      outputExample: ""
     },
     code: "",
     items: ["Java", "C++", "C", "Python", "Go"],
@@ -86,7 +92,7 @@ export default {
       this.loading = true;
       let _this = this;
       let param = {
-        problemId: _this.id,
+        problemId: parseInt(_this.id),
         content: _this.code,
         language: 0
       };

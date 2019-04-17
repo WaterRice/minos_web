@@ -110,7 +110,6 @@ export default {
             this.loading = false;
           } else {
             this.loading = false;
-            localStorage.setItem("Authorization", res.headers["Authorization"]);
             this.showMsg(SUCCESS_TIP, SUCCESS_COLOR);
             this.$router.push("/home");
           }

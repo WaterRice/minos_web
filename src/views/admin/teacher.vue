@@ -4,12 +4,12 @@
       <v-layout wrap>
         <v-flex md10>
           <v-toolbar flat color="white">
-            <v-toolbar-title>Teachers</v-toolbar-title>
+            <v-toolbar-title>所有教师</v-toolbar-title>
             <v-divider class="mx-2" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="800px" persistent>
               <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                <v-btn color="primary" dark class="mb-2" v-on="on">添加教师</v-btn>
               </template>
               <v-card>
                 <v-container>
@@ -50,9 +50,9 @@
                 <v-icon small @click="deleteItem(props.item)">delete</v-icon>
               </td>
             </template>
-            <template v-slot:no-data>
+            <!-- <template v-slot:no-data>
               <v-btn color="primary">Reset</v-btn>
-            </template>
+            </template>-->
           </v-data-table>
         </v-flex>
       </v-layout>
@@ -156,10 +156,15 @@ export default {
         Object.assign(this.teachers[this.editedIndex], this.editedItem);
         this.showMsg("更新成功");
       } else {
+        let tmp = {
+          id: 0,
+          name: this.editedItem.name,
+          acount: this.editedItem.acount
+        };
         this.$postRequest("/admin/teachers", this.editedItem).then(res => {
           if (res.data) {
-            this.editedItem.id = res.data;
-            this.teachers.push(this.editedItem);
+            tmp.id = res.data;
+            this.teachers.push(tmp);
             this.showMsg("添加成功", "teal");
           } else {
             this.showMsg("添加失败", "error");

@@ -4,12 +4,12 @@
       <v-layout wrap>
         <v-flex md10>
           <v-toolbar flat color="white">
-            <v-toolbar-title>Subjects</v-toolbar-title>
+            <v-toolbar-title>所有课程</v-toolbar-title>
             <v-divider class="mx-2" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="800px" persistent>
               <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                <v-btn color="primary" dark class="mb-2" v-on="on">新增课程</v-btn>
               </template>
               <v-card>
                 <v-container>
@@ -28,7 +28,7 @@
                         item-value="id"
                         item-text="name"
                         :rules="[rules.required]"
-                        v-model="editItem.teacher.id"
+                        v-model="editedItem.teacher.id"
                       ></v-select>
                     </v-flex>
                     <v-flex md10 style="text-align:center">
@@ -53,9 +53,9 @@
                 <v-icon small @click="deleteItem(props.item)">delete</v-icon>
               </td>
             </template>
-            <template v-slot:no-data>
+            <!-- <template v-slot:no-data>
               <v-btn color="primary">Reset</v-btn>
-            </template>
+            </template>-->
           </v-data-table>
         </v-flex>
       </v-layout>
@@ -78,7 +78,7 @@ export default {
     dialog: false,
     headers: [
       {
-        text: "题号",
+        text: "编号",
         align: "left",
         sortable: true,
         value: "id"
@@ -181,11 +181,16 @@ export default {
         let param = {
           id: 0,
           name: this.editedItem.name,
-          teacherId: this.editedIndex.teacher.id
+          teacherId: this.editedItem.teacher.id
         };
         this.$postRequest("/admin/subjects", param).then(res => {
           if (res.data) {
-            param.id = res.data;
+            tmp.id = res.data;
+            for (let teacher of this.teachers) {
+              if (teacher.id === this.editedItem.teacher.id) {
+                tmp.teacher.name = teacher.name;
+              }
+            }
             this.subjects.push(tmp);
             this.showMsg("添加成功", "teal");
           } else {

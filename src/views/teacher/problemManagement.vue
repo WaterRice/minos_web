@@ -4,12 +4,12 @@
       <v-layout wrap>
         <v-flex md10>
           <v-toolbar flat color="white">
-            <v-toolbar-title>Problems</v-toolbar-title>
+            <v-toolbar-title>所有问题</v-toolbar-title>
             <v-divider class="mx-2" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="800px" persistent>
               <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                <v-btn color="primary" dark class="mb-2" v-on="on">新建问题</v-btn>
               </template>
               <v-card>
                 <v-container>
@@ -32,16 +32,29 @@
                     <v-flex md10>
                       <v-textarea
                         label="问题输入样例"
-                        v-model="editedItem.input"
-                        hint="编写输入样例"
+                        v-model="editedItem.inputExample"
                         :rules="[rules.required,rules.max300]"
                       ></v-textarea>
                     </v-flex>
                     <v-flex md10>
                       <v-textarea
                         label="问题输出样例"
+                        v-model="editedItem.outputExample"
+                        :rules="[rules.required,rules.max300]"
+                      ></v-textarea>
+                    </v-flex>
+                    <v-flex md10>
+                      <v-textarea
+                        label="问题输入数据"
+                        v-model="editedItem.input"
+                        hint="建议数据10组以上"
+                        :rules="[rules.required,rules.max300]"
+                      ></v-textarea>
+                    </v-flex>
+                    <v-flex md10>
+                      <v-textarea
+                        label="问题输出数据"
                         v-model="editedItem.output"
-                        hint="编写输出样例"
                         :rules="[rules.required,rules.max300]"
                       ></v-textarea>
                     </v-flex>
@@ -66,9 +79,9 @@
                 <v-icon small @click="deleteItem(props.item)">delete</v-icon>
               </td>
             </template>
-            <template v-slot:no-data>
+            <!-- <template v-slot:no-data>
               <v-btn color="primary">Reset</v-btn>
-            </template>
+            </template>-->
           </v-data-table>
         </v-flex>
       </v-layout>
@@ -103,6 +116,8 @@ export default {
       id: 0,
       title: "",
       descb: "",
+      inputExample: "",
+      outputExample: "",
       input: "",
       output: ""
     },
@@ -110,6 +125,8 @@ export default {
       id: 0,
       title: "",
       descb: "",
+      inputExample: "",
+      outputExample: "",
       input: "",
       output: ""
     },
@@ -180,11 +197,13 @@ export default {
           title: _this.editedItem.title,
           descb: _this.editedItem.descb,
           input: _this.editedItem.input,
-          output: _this.editedItem.output
+          output: _this.editedItem.output,
+          inputExample: _this.editedItem.inputExample,
+          outputExample: _this.editedItem.outputExample
         };
         this.$postRequest("/teacher/problems", param).then(res => {
           if (res.data) {
-            param.id = res.data;
+            tmp.id = res.data;
             this.problems.push(tmp);
             this.showMsg("添加成功", "teal");
           } else {
