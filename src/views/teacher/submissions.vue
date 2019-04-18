@@ -4,7 +4,7 @@
       <v-flex>
         <v-card>
           <v-card-title>
-            <v-btn flat color="primary">导出成绩</v-btn>
+            <v-btn flat color="primary" :href="'/teacher/grades/' + id">导出成绩</v-btn>
             <v-spacer></v-spacer>
             <v-text-field
               v-model="search"
@@ -61,10 +61,10 @@
 export default {
   props: ["id"],
   data: () => ({
-    showMsg(msg, color) {
-      this.msgBar.color = color || "primary";
-      this.msgBar.msg = msg || "未知错误";
-      this.msgBar.show = true;
+    msgBar: {
+      color: null,
+      show: false,
+      msg: ""
     },
     editDialog: false,
     search: "",
@@ -115,13 +115,13 @@ export default {
       this.selectedSubmission.student.name = item.student.name;
       this.$getRequest("/teacher/submissions/" + item.id).then(res => {
         this.selectedSubmission.content = res.data.content;
+        this.editDialog = true;
       });
-      this.this.editDialog = true;
     },
     update() {
       let _this = this;
       this.$putRequest("/teacher/submissions/" + this.selectedSubmission.id, {
-        grade: _this.selectedSubmission.grade
+        grade: parseInt(_this.selectedSubmission.grade)
       }).then(res => {
         if (res.data) {
           for (let tmp of this.submissions) {
@@ -138,6 +138,12 @@ export default {
         }
       });
     }
+  },
+  mounted() {
+    let id = parseInt(this.id);
+    this.$getRequest("/teacher/submissions", { hid: id }).then(res => {
+      this.submissions = res.data;
+    });
   }
 };
 </script>

@@ -33,7 +33,10 @@
                             :to="'/homework/' + item.id"
                             style="text-decoration-line: none"
                           >
-                            <div class="headline primary--text">{{item.title}}</div>
+                            <div
+                              class="headline primary--text"
+                              v-text="item.title.length > 6 ? item.title.substring(0,6) + '...' : item.title"
+                            ></div>
                           </router-link>
                           <span
                             class="grey--text"

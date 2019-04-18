@@ -18,6 +18,7 @@
             <v-data-table :headers="headers" :items="codeSubmissions" :search="search">
               <template slot="items" slot-scope="props">
                 <td class="primary--text">{{ props.item.id}}</td>
+                <td class="primary--text">{{ props.item.problemId}}</td>
                 <td
                   class="text-xs-left"
                   :class="props.item.status === 0 ? 'teal--text' : 'error--text'"
@@ -59,28 +60,29 @@ export default {
     search: "",
     headers: [
       {
-        text: "问题ID",
+        text: "提交ID",
         align: "left",
-        sortable: true,
+        sortable: false,
         value: "id"
       },
+      { text: "问题ID", value: "problemId" },
       { text: "学生姓名", value: "student.name" },
-      { text: "使用语言", value: "" },
+      { text: "使用语言", value: "language" },
       { text: "提交时间", value: "time" },
       { text: "评测情况", value: "grade" }
     ],
     codeSubmissions: [
-      {
-        id: 1,
-        problemId: 1001,
-        student: {
-          id: 0,
-          name: ""
-        },
-        language: "Java",
-        time: 1556377846,
-        status: 0
-      }
+      // {
+      //   id: 1,
+      //   problemId: 1001,
+      //   student: {
+      //     id: 0,
+      //     name: ""
+      //   },
+      //   language: "Java",
+      //   time: 1556377846,
+      //   status: 0
+      // }
     ]
   }),
   mounted() {

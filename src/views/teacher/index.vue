@@ -16,7 +16,7 @@
           <v-data-table :headers="headers" :items="homeworks" :search="search">
             <template slot="items" slot-scope="props">
               <td class="primary--text">
-                <router-link :to="'/teacher/submissions/' + props.item.id">{{ props.item.id}}</router-link>
+                <router-link :to="'/teacher/submission/' + props.item.id">{{ props.item.id}}</router-link>
               </td>
               <td
                 class="text-xs-left primary--text"

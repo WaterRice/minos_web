@@ -102,7 +102,7 @@ export default new Router({
           component: () => import('./views/teacher/publish.vue')
         },
         {
-          path: 'submissions/:id',
+          path: 'submission/:id',
           name: 'submissions',
           component: () => import('./views/teacher/submissions.vue'),
           props: true
